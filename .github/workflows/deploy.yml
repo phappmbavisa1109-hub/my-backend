@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Chạy trên máy ảo Linux của GitHub
+    runs-on: ubuntu-latest
     name: Deploy
     steps:
       - name: Checkout
@@ -16,21 +16,23 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Dùng Node 18
+          # SỬA 1: Dùng Node 20 (thay vì 18)
+          node-version: '20' 
 
       - name: Install dependencies
-        run: npm install # Cài đặt (giống hệt máy bạn)
+        run: npm install
 
       - name: Build project
-        run: npm run build # Build (giống hệt máy bạn)
+        run: npm run build # File 'dist/main.js' sẽ được tạo ở đây
 
       - name: Deploy to Workers
-        uses: cloudflare/wrangler-action@v3 # Dùng action chính thức của Cloudflare
+        uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }} # Lấy token từ Secret
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # Cần thêm Account ID
-
-          # Đây là lệnh deploy (giống lệnh bị sập, nhưng chạy trên Linux)
-          command: dist/main.js --name veolagi --compatibility-flag nodejs_compat --compatibility-date 2025-11-01
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          
+          # SỬA 2: Lệnh deploy ĐÚNG
+          # Nó sẽ tự động đọc file wrangler.jsonc của bạn
+          command: deploy
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }} # Bơm secret DATABASE_URL vào
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
