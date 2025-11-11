@@ -21,21 +21,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Bước build này không còn quá quan trọng, 
-      # vì wrangler sẽ build lại, nhưng chạy nó vẫn tốt
-      - name: Build project
-        run: npm run build
+      # --- BƯỚC DEBUG MỚI ---
+      # Bước này sẽ thử đọc file config
+      # Nếu file config bị lỗi, nó sẽ báo lỗi ở đây
+      - name: DEBUG: Validate Wrangler Config
+        run: npx wrangler config -c wrangler.config.ts
 
+      # --- Bước Deploy (sẽ chỉ chạy nếu bước debug ở trên thành công) ---
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-          # --- ĐÂY LÀ SỬA LỖI ---
-          # Chúng ta truyền lệnh 'deploy' với cờ '-c'
-          # để chỉ rõ file config
+          apiToken: ${{ secrets.CLAUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLAUDFLARE_ACCOUNT_ID }}
           command: deploy -c wrangler.config.ts
-
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
