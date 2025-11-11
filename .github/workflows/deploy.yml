@@ -29,14 +29,13 @@ jobs:
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLAUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
           # --- ĐÂY LÀ SỬA LỖI ---
           # Chúng ta truyền lệnh 'deploy' với cờ '-c'
           # để chỉ rõ file config
-          configFile: './wrangler.config.ts'
-          command: deploy
+          command: deploy -c wrangler.config.ts
 
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
