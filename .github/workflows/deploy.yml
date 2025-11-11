@@ -32,14 +32,14 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-          # --- ĐÂY LÀ SỬA LỖI (CUNG CẤP TẤT CẢ CÁC CỜ + --rule) ---
+          # --- ĐÂY LÀ SỬA LỖI (DÙNG --rules SỐ NHIỀU) ---
           command: >
             deploy dist/main.js
             --name veolagi
             --compatibility-date 2025-11-01
             --compatibility-flag nodejs_compat
             --no-bundle
-            --rule type=CommonJS,globs=**/*.js
+            --rules type=CommonJS,globs=**/*.js
 
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
