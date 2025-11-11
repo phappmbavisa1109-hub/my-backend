@@ -3,11 +3,14 @@
   "main": "src/main.ts",
   "compatibility_date": "2025-11-01",
   "compatibility_flags": [ "nodejs_compat" ],
-  "esbuild": {
-    "external": [
-      "@nestjs/websockets/socket-module",
-      "@nestjs/microservices/microservices-module",
-      "@nestjs/microservices"
-    ]
+
+  "build": {
+    "esbuild_options": {
+      "external": [
+        "@nestjs/websockets/socket-module",
+        "@nestjs/microservices/microservices-module",
+        "@nestjs/microservices"
+      ]
+    }
   }
 }
