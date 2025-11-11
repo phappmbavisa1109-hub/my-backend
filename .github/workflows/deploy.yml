@@ -25,15 +25,21 @@ jobs:
       - name: Build Project (Webpack)
         run: npm run build
 
-      # BƯỚC 2: DEPLOY (SẼ ĐỌC TẤT CẢ TỪ wrangler.jsonc)
+      # BƯỚC 2: DEPLOY (SẼ KHÔNG BUILD LẠI VÀ SỬA LỖI 'require')
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-          # --- ĐÂY LÀ SỬA LỖI (CHỈ CẦN CHỈ FILE CONFIG) ---
-          command: deploy -c wrangler.jsonc
+          # --- ĐÂY LÀ SỬA LỖI (CUNG CẤP TẤT CẢ CÁC CỜ + --rule) ---
+          command: >
+            deploy dist/main.js
+            --name veolagi
+            --compatibility-date 2025-11-01
+            --compatibility-flag nodejs_compat
+            --no-bundle
+            --rule type=CommonJS,globs=**/*.js
 
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
