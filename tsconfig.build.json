@@ -6,9 +6,12 @@
     "dist",
     "**/*spec.ts",
     "**/*e2e-spec.ts",
-
     "wrangler.config.ts",
     "wrangler.config.js",
-    "wrangler.jsonc"
+    "wrangler.jsonc",
+    "wrangler.toml.bak",
+    "datasource.ts",
+    "typeorm.config.ts",
+    "eslint.config.mjs"
   ]
 }
