@@ -30,7 +30,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLAUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLAUDFLARE_ACCOUNT_ID }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy -c wrangler.config.ts
         env: # <-- ĐÃ SỬA: Dòng này phải ngang hàng với "with:"
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
