@@ -20,22 +20,26 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-      
-      # BƯỚC 1: BUILD (SẼ THÀNH CÔNG)
+
+      # BƯỚC 1: BUILD (ĐÃ THÀNH CÔNG, SẼ TẠO RA dist/main.js)
       - name: Build Project (Webpack)
         run: npm run build
-      
-      # BƯỚC 2: DEPLOY (SẼ ĐỌC wrangler.jsonc)
+
+      # BƯỚC 2: DEPLOY (SẼ KHÔNG BUILD LẠI)
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
-          # --- ĐÂY LÀ DÒNG ĐÃ SỬA LỖI TYPO ---
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          
-          # Lệnh 'deploy' đơn giản sẽ tự động tìm file wrangler.jsonc
-          command: deploy
-          
+
+          # --- ĐÂY LÀ SỬA LỖI (CUNG CẤP TẤT CẢ CÁC CỜ + NO-BUNDLE) ---
+          command: >
+            deploy dist/main.js
+            --name veolagi
+            --compatibility-date 2025-11-01
+            --compatibility-flag nodejs_compat
+            --no-bundle
+
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
