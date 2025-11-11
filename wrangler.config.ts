@@ -13,7 +13,7 @@ module.exports = {
   // 4. Cờ tương thích Node.js
   compatibility_flags: [ 'nodejs_compat' ],
 
-  // 5. PHẦN SỬA LỖI NESTJS (4 lỗi ERROR)
+  // 5. PHẦN SỬA LỖI NESTJS (6 lỗi ERROR)
   esbuild: {
     external: [
       '@nestjs/websockets/socket-module',

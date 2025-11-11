@@ -34,6 +34,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          configFile: './wrangler.config.ts'
           command: deploy # Lệnh này sẽ đọc file wrangler.jsonc
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
