@@ -8,6 +8,7 @@
     "**/*e2e-spec.ts",
 
     "wrangler.config.ts",
-    "wrangler.config.js"
+    "wrangler.config.js",
+    "wrangler.jsonc"
   ]
 }

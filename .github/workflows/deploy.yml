@@ -21,26 +21,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Chạy build để đảm bảo (mặc dù Wrangler sẽ build lại)
-      - name: Build project
+      # BƯỚC 1: BUILD (SẼ THÀNH CÔNG VÌ ĐÃ SỬA tsconfig.build.json)
+      - name: Build Project (Webpack)
         run: npm run build
 
+      # BƯỚC 2: DEPLOY (SẼ ĐỌC wrangler.jsonc)
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLAUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLAUDFLARE_ACCOUNT_ID }}
-          
-          # --- ĐÂY LÀ SỬA LỖI (CUNG CẤP TẤT CẢ CÁC CỜ) ---
-          command: > # Dấu '>' cho phép viết nhiều dòng
-            deploy src/main.ts 
-            --name veolagi 
-            --compatibility-date 2025-11-01 
-            --compatibility-flag nodejs_compat 
-            --external @nestjs/websockets/socket-module 
-            --external @nestjs/microservices/microservices-module 
-            --external @nestjs/microservices
-            
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+          # Lệnh 'deploy' đơn giản sẽ tự động tìm file wrangler.jsonc
+          command: deploy
+
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLAUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
