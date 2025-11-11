@@ -2,5 +2,7 @@
   "name": "veolagi",
   "compatibility_date": "2025-11-01",
   "compatibility_flags": [ "nodejs_compat" ],
-  "main": "dist/main.js"
+
+  "main": "dist/main.js",
+  "format": "commonjs"
 }
