@@ -39,7 +39,7 @@ jobs:
             --compatibility-date 2025-11-01
             --compatibility-flag nodejs_compat
             --no-bundle
-
+            --format commonjs
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
