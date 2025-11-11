@@ -3,7 +3,7 @@ name: Deploy to Cloudflare Workers
 on:
   push:
     branches:
-      - main
+      - main 
 
 jobs:
   deploy:
@@ -16,21 +16,19 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20' 
 
       - name: Install dependencies
         run: npm install
 
-      # --- BƯỚC DEBUG MỚI ---
-      - name: DEBUG Validate Wrangler Config
-        run: npx wrangler config -c wrangler.config.ts
-
-      # --- Bước Deploy ---
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy -c wrangler.config.ts
+
+          # --- SỬA LỖI: Trỏ đến file .js ---
+          command: deploy -c wrangler.config.js
+
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
