@@ -1,6 +1,13 @@
 {
   "name": "veolagi",
+  "main": "src/main.ts",
   "compatibility_date": "2025-11-01",
   "compatibility_flags": [ "nodejs_compat" ],
-  "main": "dist/main.js"
+  "esbuild": {
+    "external": [
+      "@nestjs/websockets/socket-module",
+      "@nestjs/microservices/microservices-module",
+      "@nestjs/microservices"
+    ]
+  }
 }
