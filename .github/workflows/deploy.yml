@@ -35,7 +35,8 @@ jobs:
           # --- ĐÂY LÀ SỬA LỖI ---
           # Chúng ta truyền lệnh 'deploy' với cờ '-c'
           # để chỉ rõ file config
-          command: deploy -c wrangler.config.ts
+          configFile: './wrangler.config.ts'
+          command: deploy
 
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
