@@ -33,7 +33,7 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           
           # Lệnh này sẽ chạy, và nó cần 'env' ở dưới
-          command: deploy src/main.ts -c wrangler.config.js --name veolagi
+          command: deploy src/main.ts -c wrangler.config.js --name veolagi --compatibility-date 2025-11-01
           
         env:
           # Biến 'env' này dành cho 'command:' ở trên
