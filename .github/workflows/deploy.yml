@@ -3,7 +3,7 @@ name: Deploy to Cloudflare Workers
 on:
   push:
     branches:
-      - main # Chỉ chạy khi push lên nhánh 'main'
+      - main 
 
 jobs:
   deploy:
@@ -16,23 +16,24 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          # SỬA 1: Dùng Node 20 (thay vì 18)
           node-version: '20' 
 
       - name: Install dependencies
         run: npm install
 
       - name: Build project
-        run: npm run build # File 'dist/main.js' sẽ được tạo ở đây
+        run: npm run build
+
+      # --- BƯỚC MỚI ĐỂ GỠ LỖI ---
+      - name: List files after build (DEBUG)
+        run: ls -R
+      # ---------------------------
 
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          
-          # SỬA 2: Lệnh deploy ĐÚNG
-          # Nó sẽ tự động đọc file wrangler.jsonc của bạn
-          command: deploy
+          command: deploy # Lệnh này sẽ đọc file wrangler.jsonc
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
