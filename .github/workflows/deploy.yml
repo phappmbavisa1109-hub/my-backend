@@ -1,0 +1,36 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main # Chỉ chạy khi push lên nhánh 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Chạy trên máy ảo Linux của GitHub
+    name: Deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Dùng Node 18
+
+      - name: Install dependencies
+        run: npm install # Cài đặt (giống hệt máy bạn)
+
+      - name: Build project
+        run: npm run build # Build (giống hệt máy bạn)
+
+      - name: Deploy to Workers
+        uses: cloudflare/wrangler-action@v3 # Dùng action chính thức của Cloudflare
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }} # Lấy token từ Secret
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # Cần thêm Account ID
+
+          # Đây là lệnh deploy (giống lệnh bị sập, nhưng chạy trên Linux)
+          command: dist/main.js --name veolagi --compatibility-flag nodejs_compat --compatibility-date 2025-11-01
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }} # Bơm secret DATABASE_URL vào
