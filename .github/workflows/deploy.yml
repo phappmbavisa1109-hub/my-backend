@@ -3,7 +3,7 @@ name: Deploy to Cloudflare Workers
 on:
   push:
     branches:
-      - main
+      - main 
 
 jobs:
   deploy:
@@ -16,27 +16,28 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20' 
 
       - name: Install dependencies
         run: npm install
 
-      # Bước build này (npm run build) không còn quan trọng,
-      # vì Wrangler sẽ build lại file src/main.ts
+      # Chạy build để đảm bảo (mặc dù Wrangler sẽ build lại)
       - name: Build project
         run: npm run build
 
       - name: Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLAUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLAUDFLARE_ACCOUNT_ID }}
+          # Token này là cho 'uses: cloudflare/wrangler-action'
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           
-          # --- ĐÂY LÀ SỬA LỖI (CUNG CẤP CẢ HAI) ---
-          # 1. Chỉ định file entry-point (src/main.ts)
-          # 2. Chỉ định file config (-c wrangler.config.js)
+          # Lệnh này sẽ chạy, và nó cần 'env' ở dưới
           command: deploy src/main.ts -c wrangler.config.js
           
         env:
+          # Biến 'env' này dành cho 'command:' ở trên
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          
+          # --- ĐÂY LÀ DÒNG SỬA LỖI ---
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
