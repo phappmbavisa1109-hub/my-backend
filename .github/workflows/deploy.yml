@@ -22,8 +22,6 @@ jobs:
         run: npm install
 
       # --- BƯỚC DEBUG MỚI ---
-      # Bước này sẽ thử đọc file config
-      # Nếu file config bị lỗi, nó sẽ báo lỗi ở đây
       - name: DEBUG: Validate Wrangler Config
         run: npx wrangler config -c wrangler.config.ts
 
@@ -34,5 +32,5 @@ jobs:
           apiToken: ${{ secrets.CLAUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLAUDFLARE_ACCOUNT_ID }}
           command: deploy -c wrangler.config.ts
-        env:
+        env: # <-- ĐÃ SỬA: Dòng này phải ngang hàng với "with:"
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
