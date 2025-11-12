@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { VideoHistory, VideoType } from '../entities/video-history.entity';
+import { VideoHistory, VideoType } from '../entities/video-history.entity.js';
 
 @Injectable()
 export class VideoHistoryService {

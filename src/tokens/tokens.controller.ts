@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Delete, Body, Param, UseGuards, Query, Put } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { TokensService } from './tokens.service';
-import { Token } from '../entities/token.entity';
-import { AdminGuard } from '../auth/guards/admin.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { TokensService } from './tokens.service.js';
+import { Token } from '../entities/token.entity.js';
+import { AdminGuard } from '../auth/guards/admin.guard.js';
 
 @Controller('tokens')
 export class TokensController {

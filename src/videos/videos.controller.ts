@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { VideosService } from './videos.service.js';
 import { Video } from '../entities/video.entity.js';
-import { storageConfig } from '../config/storage.config';
-import { UploadVideoDto } from './dto/upload-video.dto';
+import { storageConfig } from '../config/storage.config.js';
+import { UploadVideoDto } from './dto/upload-video.dto.js';
 import type { Express } from 'express';
 
 @Controller('videos')
