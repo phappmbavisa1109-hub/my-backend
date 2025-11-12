@@ -42,6 +42,27 @@ module.exports.appRootPath = '/worker';
 EOF
 fi
 
+# Patch bcrypt to define __dirname at module load time
+if [ -f "node_modules/bcrypt/bcrypt.js" ]; then
+  # Extract everything after the first line and prepend __dirname definition
+  tail -n +2 node_modules/bcrypt/bcrypt.js > /tmp/bcrypt_temp.js
+  cat > node_modules/bcrypt/bcrypt.js << 'EOF'
+const __dirname = typeof __dirname !== 'undefined' ? __dirname : '/worker';
+EOF
+  cat /tmp/bcrypt_temp.js >> node_modules/bcrypt/bcrypt.js
+  rm /tmp/bcrypt_temp.js
+fi
+
+# Patch bcrypt/build/Release/bcrypt_lib.js if it exists
+if [ -f "node_modules/bcrypt/build/Release/bcrypt_lib.js" ]; then
+  if ! grep -q "const __dirname" node_modules/bcrypt/build/Release/bcrypt_lib.js; then
+    # Prepend __dirname definition
+    echo "const __dirname = typeof __dirname !== 'undefined' ? __dirname : '/worker';" > /tmp/bcrypt_lib_temp.js
+    cat node_modules/bcrypt/build/Release/bcrypt_lib.js >> /tmp/bcrypt_lib_temp.js
+    mv /tmp/bcrypt_lib_temp.js node_modules/bcrypt/build/Release/bcrypt_lib.js
+  fi
+fi
+
 echo "✓ Cloudflare Workers patches applied"
 
 
