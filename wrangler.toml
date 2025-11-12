@@ -3,38 +3,3 @@ main = "dist/main.js"
 
 compatibility_date = "2025-11-01"
 compatibility_flags = [ "nodejs_compat" ]
-
-# Build configuration for esbuild
-[build]
-external = [
-  # Microservices - gRPC
-  "@grpc/grpc-js",
-  "@grpc/proto-loader",
-  
-  # Microservices - Kafka
-  "kafkajs",
-  
-  # Microservices - MQTT
-  "mqtt",
-  
-  # Microservices - NATS
-  "nats",
-  
-  # Microservices - Redis
-  "ioredis",
-  
-  # Microservices - RabbitMQ (AMQP)
-  "amqplib",
-  "amqp-connection-manager",
-  
-  # WebSockets - Socket.io
-  "@nestjs/platform-socket.io",
-  
-  # Optional Nest modules - sub-paths
-  "@nestjs/websockets/socket-module",
-  "@nestjs/microservices/microservices-module",
-  
-  # Optional Nest modules - root
-  "@nestjs/microservices",
-  "@nestjs/websockets",
-]

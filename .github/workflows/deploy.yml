@@ -35,5 +35,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Uses wrangler.config.js to configure esbuild externals for optional packages
-          command: deploy
+          # Deploy pre-built dist/main.js without wrangler bundling
+          # Webpack already bundled everything with proper externals
+          command: deploy --no-bundle
