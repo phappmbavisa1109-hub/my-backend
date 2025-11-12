@@ -1,62 +1,57 @@
-// src/main.ts - Express API for Cloudflare Workers
-import express from 'express';
-import serverless from 'serverless-http';
-import { AppController } from './app.controller';
+// src/main.ts - NestJS + Cloudflare Workers
 
-// Define environment types
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import serverless from 'serverless-http';
+
 export interface Env {
   DATABASE_URL: string;
 }
 
-// Create Express app
-const app = express();
+let app: INestApplication;
+let serverlessHandler: any;
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+async function bootstrap() {
+  if (!app) {
+    app = await NestFactory.create(AppModule, {
+      logger: false, // Disable Nest logger to reduce noise
+    });
 
-// CORS
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
+
+    // Get Express app from NestJS
+    const expressApp = app.getHttpServer();
+    serverlessHandler = serverless(expressApp);
+
+    await app.init();
   }
-  next();
-});
 
-// Initialize app controller
-const appController = new AppController();
+  return serverlessHandler;
+}
 
-// Routes
-app.get('/', (req, res) => {
-  res.json({ message: appController.getHello() });
-});
-
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-// Export for Cloudflare Workers
-const handler = serverless(app);
-
+// Cloudflare Workers entry point
 export default {
   async fetch(
     request: Request,
     env: Env,
     ctx: ExecutionContext,
   ): Promise<Response> {
-    // Inject env into process
-    (globalThis as any).process = {
+    // Inject environment variables
+    (global as any).process = {
       env: {
         ...process.env,
         ...env,
       },
     };
 
+    const handler = await bootstrap();
     return handler(request as any, ctx) as unknown as Response;
   },
 };
