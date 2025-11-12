@@ -35,7 +35,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: >
-            deploy --external @nestjs/websockets 
-                   --external @nestjs/microservices
-                   --external @nestjs/platform-express
+          # `--external` is not a valid flag for the Wrangler CLI; use `external_packages`
+          # in `wrangler.toml` instead. Keep the deploy command simple.
+          command: deploy
