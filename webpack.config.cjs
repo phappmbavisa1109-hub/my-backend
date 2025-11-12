@@ -1,10 +1,11 @@
 /**
  * Webpack configuration for NestJS + Cloudflare Workers
  * 
- * This config:
- * 1. Bundles all required dependencies
- * 2. Marks optional packages as external (they'll be require() calls in the bundle)
- * 3. Outputs a single main.js file suitable for Cloudflare Workers
+ * Key strategy:
+ * 1. Bundle all required dependencies into ESM format
+ * 2. Mark optional packages as external (they'll become require() calls)
+ * 3. Polyfill require() in main.ts to handle optional package failures gracefully
+ * 4. Output single main.js with ESM syntax for Cloudflare Workers
  */
 
 const path = require('path');
@@ -15,6 +16,13 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    // Force ESM output - Cloudflare Workers require ESM
+    library: {
+      type: 'module',
+    },
+  },
+  experiments: {
+    outputModule: true,
   },
   target: 'node',
   resolve: {
@@ -30,10 +38,10 @@ module.exports = {
       },
     ],
   },
-  // Mark packages that will fail at runtime as external
-  // They won't be bundled, and NestJS has try-catch for them
+  // Mark optional packages as external to keep as require() calls
+  // Our polyfill in main.ts will handle these gracefully
   externals: {
-    // Optional microservices transports
+    // Optional microservices transports - won't be bundled
     '@grpc/grpc-js': '@grpc/grpc-js',
     '@grpc/proto-loader': '@grpc/proto-loader',
     'kafkajs': 'kafkajs',

@@ -1,5 +1,14 @@
 // src/main.ts (Phiên bản ES Module chuẩn cho Cloudflare)
 
+// Polyfill require() for Cloudflare Workers ESM environment
+// NestJS tries to dynamically require optional packages; we intercept with a no-op
+if (typeof (globalThis as any).require === 'undefined') {
+  (globalThis as any).require = function(id: string) {
+    console.warn(`[Polyfill] require('${id}') called but not available in Cloudflare Workers`);
+    return {};
+  };
+}
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
