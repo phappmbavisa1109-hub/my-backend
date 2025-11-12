@@ -35,6 +35,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Deploy pre-built dist/main.js without wrangler bundling
-          # Webpack already bundled everything with proper externals
-          command: deploy --no-bundle
+          # Let Wrangler bundle dist/main.js with all dependencies
+          command: deploy
