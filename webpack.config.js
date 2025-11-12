@@ -7,9 +7,13 @@
  * 3. Outputs a single main.js file suitable for Cloudflare Workers
  */
 
-const path = require('path');
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default {
   mode: 'production',
   entry: './src/main.ts',
   output: {
