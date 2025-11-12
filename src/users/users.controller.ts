@@ -1,9 +1,9 @@
 import { Controller, Get, Body, Param, Put, Delete, UseGuards, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { User } from '../entities/user.entity';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { AdminGuard } from '../auth/guards/admin.guard';
+import { UsersService } from './users.service.js';
+import { User } from '../entities/user.entity.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
+import { AdminGuard } from '../auth/guards/admin.guard.js';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
