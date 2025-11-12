@@ -1,10 +1,9 @@
-// src/main.ts (Phiên bản CJS cho Webpack)
+// src/main.ts (Phiên bản ES Module chuẩn cho Cloudflare)
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import serverless from 'serverless-http';
-import { Request as ExpressRequest } from 'express'; // Đổi tên để tránh xung đột
 
 // Định nghĩa kiểu cho Env (sẽ được truyền từ Cloudflare)
 export interface Env {
@@ -44,30 +43,28 @@ async function bootstrap() {
     );
 
     await app.init();
-    
+
     const server = app.getHttpServer();
     serverlessHandler = serverless(server);
   }
   return serverlessHandler;
 }
 
-// Đây là phần quan trọng: Export handler theo kiểu CommonJS
-// Wrangler (với format = "commonjs") sẽ tự động bọc
-// module.exports này trong một 'fetch' handler.
-module.exports.handler = async (
-  request: Request, // Đây là Request của Cloudflare
-  env: Env,         // Đây là các secret/vars
-  ctx: ExecutionContext,
-): Promise<Response> => { // <--- SỬA LẠI: Thêm "=>"
-  // RẤT QUAN TRỌNG: Inject các biến Env của Cloudflare vào process.env
-  // Để NestJS ConfigService hoặc TypeORM có thể đọc được
-  // Logic này từ file cũ của bạn  là rất chính xác!
-  global.process.env = { ...global.process.env, ...env };
+// Đây là cú pháp ESM chuẩn mà Cloudflare Workers mong đợi
+export default {
+  async fetch(
+    request: Request, // Request của Cloudflare
+    env: Env,         // Secret/vars
+    ctx: ExecutionContext,
+  ): Promise<Response> {
+    
+    // Inject các biến Env của Cloudflare vào process.env
+    global.process.env = { ...global.process.env, ...env };
 
-  // Lấy (hoặc tạo) app handler
-  const handler = await bootstrap();
+    // Lấy (hoặc tạo) app handler
+    const handler = await bootstrap();
 
-  // Chuyển request cho 'serverless-http' xử lý
-  // Cần ép kiểu 'Request' của Cloudflare thành 'ExpressRequest' (hoặc 'any')
-  return handler(request as any, ctx) as unknown as Response;
+    // Chuyển request cho 'serverless-http' xử lý
+    return handler(request as any, ctx) as unknown as Response;
+  },
 };
