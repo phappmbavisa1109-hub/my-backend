@@ -1,7 +1,7 @@
 // src/main.ts (Phiên bản ES Module chuẩn cho Cloudflare)
 
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import serverless from 'serverless-http';
 

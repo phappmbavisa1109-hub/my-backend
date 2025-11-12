@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Video } from '../entities/video.entity';
-import { VideosController } from './videos.controller';
-import { VideosService } from './videos.service';
+import { Video } from '../videos/video.entity.js';
+import { VideosController } from '../videos/videos.controller.js';
+import { VideosService } from '../videos/videos.service.js';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Video])],
