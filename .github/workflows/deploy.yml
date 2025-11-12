@@ -35,6 +35,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Use --no-bundle because dist/main.js is already built by 'npm run build'
-          # This avoids esbuild trying to resolve optional microservices dependencies (gRPC, Kafka, MQTT, NATS, etc.)
-          command: deploy --no-bundle
+          # Uses wrangler.config.js to configure esbuild externals for optional packages
+          command: deploy
