@@ -1,4 +1,13 @@
-// src/main.ts - NestJS + Cloudflare Workers
+// src/main.ts - NestJS + Cloudflare Workers with require() polyfill
+
+// Polyfill require() để NestJS không crash khi require optional packages
+if (typeof (globalThis as any).require === 'undefined') {
+  (globalThis as any).require = function(moduleId: string) {
+    // Return empty object/module cho những packages không tồn tại
+    console.warn(`[Polyfill] require('${moduleId}') called but module not available`);
+    return {};
+  };
+}
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -15,7 +24,7 @@ let serverlessHandler: any;
 async function bootstrap() {
   if (!app) {
     app = await NestFactory.create(AppModule, {
-      logger: false, // Disable Nest logger to reduce noise
+      logger: false,
     });
 
     app.useGlobalPipes(
@@ -26,7 +35,6 @@ async function bootstrap() {
       }),
     );
 
-    // Get Express app from NestJS
     const expressApp = app.getHttpServer();
     serverlessHandler = serverless(expressApp);
 
@@ -36,14 +44,12 @@ async function bootstrap() {
   return serverlessHandler;
 }
 
-// Cloudflare Workers entry point
 export default {
   async fetch(
     request: Request,
     env: Env,
     ctx: ExecutionContext,
   ): Promise<Response> {
-    // Inject environment variables
     (global as any).process = {
       env: {
         ...process.env,
