@@ -20,9 +20,15 @@ import { ProxyModule } from './proxy/proxy.module';
 import { TokensModule } from './tokens/tokens.module';
 import { VideoHistoryModule } from './video-history/video-history.module';
 
-// --- SỬA LỖI __dirname ---
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// --- SỬA LỖI __dirname - FALLBACK FOR WORKERS ---
+let __dirname = '/worker';
+try {
+  const __filename = fileURLToPath(import.meta.url);
+  __dirname = dirname(__filename);
+} catch (e) {
+  // Fallback for Cloudflare Workers where import.meta.url may be undefined
+  __dirname = '/worker';
+}
 
 @Module({
   imports: [
