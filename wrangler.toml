@@ -1,5 +1,5 @@
 name = "veolagi"
-main = "dist/main.js" 
+main = "dist/handler.js"
 
 compatibility_date = "2025-11-01"
 compatibility_flags = [ "nodejs_compat" ]
