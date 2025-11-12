@@ -42,15 +42,24 @@ module.exports.appRootPath = '/worker';
 EOF
 fi
 
-# Patch bcrypt to define __dirname at module load time and replace path require
+# Patch bcrypt to polyfill __dirname and make path optional
 if [ -f "node_modules/bcrypt/bcrypt.js" ]; then
   # Check if already patched
   if ! grep -q "WORKERS_PATCHED" node_modules/bcrypt/bcrypt.js; then
-    # Use sed to:
-    # 1. Add polyfill at start
-    # 2. Replace "const path = require('path')" with conditional
-    sed -i '1s/^/\/\/ WORKERS_PATCHED: Cloudflare Workers compatibility\nconst __dirname = typeof __dirname !== '\''undefined'\'' ? __dirname : '\''/worker'\'';\n/' node_modules/bcrypt/bcrypt.js
-    sed -i "s/const path = require('path');/const path = (typeof require !== 'undefined' && require('path')) || { resolve: (...args) => '\/\/' + args.join('\/'), join: (...args) => args.join('\/'), dirname: (p) => p.split('\/').slice(0, -1).join('\/')};/" node_modules/bcrypt/bcrypt.js
+    # Create temp file with polyfill prepended
+    cat > /tmp/bcrypt_patched.js << 'PATCH_EOF'
+// WORKERS_PATCHED: Cloudflare Workers compatibility
+if (typeof __dirname === 'undefined') {
+  globalThis.__dirname = '/worker';
+}
+PATCH_EOF
+    # Append original content
+    cat node_modules/bcrypt/bcrypt.js >> /tmp/bcrypt_patched.js
+    # Move patched file back
+    mv /tmp/bcrypt_patched.js node_modules/bcrypt/bcrypt.js
+    
+    # Now fix the path require line - comment it out and provide fallback
+    sed -i "s/^const path = require('path');/let path;\ntry { path = require('path'); } catch(e) { path = { resolve: (...a) => a.join('\/'), join: (...a) => a.join('\/'), dirname: (p) => p.split('\/').slice(0, -1).join('\/')  }; }/" node_modules/bcrypt/bcrypt.js
   fi
 fi
 
