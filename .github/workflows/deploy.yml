@@ -35,6 +35,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # `--external` is not a valid flag for the Wrangler CLI; use `external_packages`
-          # in `wrangler.toml` instead. Keep the deploy command simple.
-          command: deploy
+          # Use --no-bundle because dist/main.js is already built by 'npm run build'
+          # This avoids esbuild trying to resolve optional microservices dependencies (gRPC, Kafka, MQTT, NATS, etc.)
+          command: deploy --no-bundle
