@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Build Project (Webpack)
-        run: npm run build # Tạo ra 'dist/main.js'
+        run: npm run build
 
       - name: 🔐 Set Cloudflare Secrets
         run: echo "${{ secrets.DATABASE_URL }}" | npx wrangler secret put DATABASE_URL
@@ -37,4 +37,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # Báo cho Wrangler deploy file đã build, không build lại
-          command: deploy --no-bundle
+          command: deploy
