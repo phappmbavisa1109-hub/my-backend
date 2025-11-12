@@ -58,7 +58,7 @@ module.exports.handler = async (
   request: Request, // Đây là Request của Cloudflare
   env: Env,         // Đây là các secret/vars
   ctx: ExecutionContext,
-): Promise<Response> {
+): Promise<Response> => { // <--- SỬA LẠI: Thêm "=>"
   // RẤT QUAN TRỌNG: Inject các biến Env của Cloudflare vào process.env
   // Để NestJS ConfigService hoặc TypeORM có thể đọc được
   // Logic này từ file cũ của bạn  là rất chính xác!
