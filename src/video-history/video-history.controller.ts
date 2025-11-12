@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
-import { VideoHistoryService } from './video-history.service.js';
-import { VideoType } from '../entities/video-history.entity.js';
-import { User as UserEntity } from '../entities/user.entity.js';
-import { User } from '../decorators/user.decorator.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { VideoHistoryService } from './video-history.service';
+import { VideoType } from '../entities/video-history.entity';
+import { User as UserEntity } from '../entities/user.entity';
+import { User } from '../decorators/user.decorator';
 
 @Controller('video-history')
 @UseGuards(JwtAuthGuard)

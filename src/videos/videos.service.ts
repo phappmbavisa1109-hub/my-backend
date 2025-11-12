@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Video } from '../entities/video.entity.js';
+import { Video } from '../entities/video.entity';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 

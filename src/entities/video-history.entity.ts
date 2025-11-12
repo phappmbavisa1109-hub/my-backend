@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from './user.entity.js';
+import { User } from './user.entity';
 
 export enum VideoType {
     BATCH = 'batch',    // Video tạo hàng loạt

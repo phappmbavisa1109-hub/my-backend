@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "resolvePackageJsonExports": true,
     "esModuleInterop": true,
     "isolatedModules": true,

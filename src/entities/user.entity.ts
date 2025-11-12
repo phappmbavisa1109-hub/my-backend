@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { Video } from './video.entity.js';
+import { Video } from './video.entity';
 
 @Entity('users')
 export class User {

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TokensController } from './tokens.controller.js';
-import { TokensService } from './tokens.service.js';
-import { Token } from '../entities/token.entity.js';
+import { TokensController } from './tokens.controller';
+import { TokensService } from './tokens.service';
+import { Token } from '../entities/token.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Token])],
