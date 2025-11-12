@@ -1,0 +1,16 @@
+# Đây là file wrangler.toml hoàn chỉnh của bạn
+name = "veolagi"
+main = "dist/main.js" # Trỏ đến file output của NestJS Webpack
+format = "commonjs"   # Định dạng file output của NestJS Webpack
+
+compatibility_date = "2025-11-01"
+compatibility_flags = [ "nodejs_compat" ] # Rất quan trọng cho NestJS, TypeORM, pg
+
+# [vars]
+# Thêm các biến môi trường NON-SECRET (không nhạy cảm) ở đây
+# VÍ DỤ: VEO_ENV = "production"
+
+# [secrets]
+# Chúng ta sẽ không định nghĩa secret ở đây, 
+# mà sẽ dùng GitHub Actions để "put" (đẩy) secret lên
+# File này chỉ để ghi chú rằng Worker CÓ SỬ DỤNG secret

@@ -21,26 +21,25 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # BƯỚC 1: BUILD (ĐÃ THÀNH CÔNG, SẼ TẠO RA dist/main.js)
       - name: Build Project (Webpack)
-        run: npm run build
+        run: npm run build # Bước này tạo ra file 'dist/main.js'
 
-      # BƯỚC 2: DEPLOY (SẼ KHÔNG BUILD LẠI VÀ SỬA LỖI 'require')
-      - name: Deploy to Workers
+      # BƯỚC MỚI: Đẩy secret DATABASE_URL lên Cloudflare một cách an toàn
+      - name: 🔐 Set Cloudflare Secrets
+        run: echo "${{ secrets.DATABASE_URL }}" | npx wrangler secret put DATABASE_URL
+        env:
+          # Bước này cũng cần API token và Account ID để xác thực
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # BƯỚC SỬA LỖI: Đơn giản hóa deploy, để Wrangler đọc file .toml
+      - name: 🚀 Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-          # --- ĐÂY LÀ SỬA LỖI (DÙNG --rules SỐ NHIỀU) ---
-          command: >
-            deploy dist/main.js
-            --name veolagi
-            --compatibility-date 2025-11-01
-            --compatibility-flag nodejs_compat
-            --no-bundle
-            --rules type=CommonJS,globs=**/*.js
-
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # KHÔNG CẦN 'command:' NỮA!
+          # Wrangler-action sẽ tự động chạy 'wrangler deploy'.
+          # 'wrangler deploy' sẽ tự động đọc file 'wrangler.toml' 
+          # và biết phải deploy file 'dist/main.js' với tên 'veolagi'
+          # và các compatibility_flags cần thiết.
