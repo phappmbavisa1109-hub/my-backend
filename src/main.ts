@@ -1,9 +1,17 @@
-// src/main.ts - NestJS + Cloudflare Workers with require() polyfill
+// src/main.ts - NestJS + Cloudflare Workers with polyfills
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Polyfill __filename and __dirname for Cloudflare Workers
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+(globalThis as any).__filename = __filename;
+(globalThis as any).__dirname = __dirname;
 
 // Polyfill require() để NestJS không crash khi require optional packages
 if (typeof (globalThis as any).require === 'undefined') {
   (globalThis as any).require = function(moduleId: string) {
-    // Return empty object/module cho những packages không tồn tại
     console.warn(`[Polyfill] require('${moduleId}') called but module not available`);
     return {};
   };
