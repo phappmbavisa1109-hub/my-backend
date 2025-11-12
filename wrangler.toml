@@ -3,12 +3,3 @@ main = "dist/main.js"
 
 compatibility_date = "2025-11-01"
 compatibility_flags = [ "nodejs_compat" ]
-
-# Build configuration - tell esbuild which packages are external (won't be bundled)
-# NestJS will try to require these dynamically, but they're optional
-[build]
-external = [
-  "@nestjs/websockets",
-  "@nestjs/microservices",
-  "@nestjs/platform-socket.io",
-]
