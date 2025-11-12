@@ -69,7 +69,7 @@ app.post('/auth/register', async (req: Request, res: Response) => {
   try {
     const dataSource = await initializeDatabase();
     const userRepository = dataSource.getRepository(User);
-    const { email, password, name } = req.body;
+    const { email, password, firstName, lastName } = req.body;
 
     // Validate input
     if (!email || !password) {
@@ -89,7 +89,8 @@ app.post('/auth/register', async (req: Request, res: Response) => {
     const user = userRepository.create({
       email,
       password: hashedPassword,
-      name: name || email.split('@')[0],
+      firstName: firstName || email.split('@')[0],
+      lastName: lastName || '',
     });
 
     await userRepository.save(user);
@@ -105,7 +106,8 @@ app.post('/auth/register', async (req: Request, res: Response) => {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
       accessToken,
     });
@@ -145,7 +147,8 @@ app.post('/auth/login', async (req: Request, res: Response) => {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
       accessToken,
     });
