@@ -172,6 +172,17 @@ app.use((err: Error, req: Request, res: Response) => {
 // Export handler for Cloudflare Workers
 export const handler = serverless(app);
 
+// Export default for Cloudflare Workers entry point
+export default {
+  async fetch(
+    request: Request,
+    env: Record<string, any>,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
+    return handler(request as any, ctx) as unknown as Response;
+  },
+};
+
 // For local Node.js development
 if (process.env.NODE_ENV !== 'cloudflare') {
   const PORT = process.env.PORT || 3000;
