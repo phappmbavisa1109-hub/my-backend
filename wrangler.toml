@@ -3,11 +3,3 @@ main = "dist/main.js"
 
 compatibility_date = "2025-11-01"
 compatibility_flags = [ "nodejs_compat" ]
-
-# --- THÊM PHẦN NÀY ---
-# Liệt kê các gói tùy chọn mà ESbuild không tìm thấy
-external_packages = [
-    "@nestjs/websockets", 
-    "@nestjs/microservices",
-    "@nestjs/platform-express"
-]
