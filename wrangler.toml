@@ -1,8 +1,10 @@
-# Đây là file wrangler.toml đã sửa lỗi "require"
+# Đây là file wrangler.toml chính xác
 name = "veolagi"
-main = "dist/main.js" # Vẫn trỏ đến file output của Webpack
+main = "dist/main.js" # Trỏ đến file output của NestJS Webpack
 
-# XÓA DÒNG 'format = "commonjs"' BỊ LỖI THỜI Ở ĐÂY
+# ĐÂY LÀ CHÌA KHÓA: Đặt 'format' ở cấp cao nhất (top-level)
+# Nó báo cho Wrangler biết file 'main' là CommonJS
+format = "commonjs"   
 
 compatibility_date = "2025-11-01"
 compatibility_flags = [ "nodejs_compat" ]
@@ -10,9 +12,4 @@ compatibility_flags = [ "nodejs_compat" ]
 # [vars]
 # VÍ DỤ: VEO_ENV = "production"
 
-# --- THÊM PHẦN NÀY ĐỂ FIX LỖI ---
-# Đây là cách mới để báo cho Cloudflare biết file của bạn là CommonJS
-[build]
-module_rules = [
-  { type = "CommonJS", globs = ["**/*.js"] }
-]
+# Đảm bảo bạn XÓA bỏ khối [build.module_rules] mà tôi đã thêm vào trước đó
