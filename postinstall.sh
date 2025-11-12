@@ -42,15 +42,19 @@ module.exports.appRootPath = '/worker';
 EOF
 fi
 
-# Patch bcrypt to define __dirname at module load time
+# Patch bcrypt to define __dirname and path at module load time
 if [ -f "node_modules/bcrypt/bcrypt.js" ]; then
-  # Extract everything after the first line and prepend __dirname definition
-  tail -n +2 node_modules/bcrypt/bcrypt.js > /tmp/bcrypt_temp.js
-  cat > node_modules/bcrypt/bcrypt.js << 'EOF'
+  # Check if already patched
+  if ! grep -q "WORKERS_PATCHED" node_modules/bcrypt/bcrypt.js; then
+    # Extract everything and prepend definitions
+    cat > /tmp/bcrypt_temp.js << 'EOF'
+// WORKERS_PATCHED: Polyfill for Cloudflare Workers compatibility
 const __dirname = typeof __dirname !== 'undefined' ? __dirname : '/worker';
+const path = typeof path !== 'undefined' ? path : { resolve: (...args) => '/' + args.join('/'), join: (...args) => args.join('/'), dirname: (p) => p.split('/').slice(0, -1).join('/') };
 EOF
-  cat /tmp/bcrypt_temp.js >> node_modules/bcrypt/bcrypt.js
-  rm /tmp/bcrypt_temp.js
+    tail -n +1 node_modules/bcrypt/bcrypt.js >> /tmp/bcrypt_temp.js
+    mv /tmp/bcrypt_temp.js node_modules/bcrypt/bcrypt.js
+  fi
 fi
 
 # Patch bcrypt/build/Release/bcrypt_lib.js if it exists
