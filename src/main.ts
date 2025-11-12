@@ -1,13 +1,25 @@
 // src/main.ts - NestJS + Cloudflare Workers with polyfills
 
+// IMPORTANT: Define globals BEFORE any imports to ensure all modules see them
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-// Polyfill __filename and __dirname for Cloudflare Workers
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-(globalThis as any).__filename = __filename;
-(globalThis as any).__dirname = __dirname;
+
+// Define on globalThis IMMEDIATELY
+Object.defineProperty(globalThis, '__filename', { 
+  value: __filename, 
+  configurable: true 
+});
+Object.defineProperty(globalThis, '__dirname', { 
+  value: __dirname, 
+  configurable: true 
+});
+Object.defineProperty(globalThis, '__dirname', { 
+  value: __dirname, 
+  configurable: true 
+});
 
 // Polyfill require() để NestJS không crash khi require optional packages
 if (typeof (globalThis as any).require === 'undefined') {
