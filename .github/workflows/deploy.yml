@@ -28,13 +28,14 @@ jobs:
         run: echo "${{ secrets.DATABASE_URL }}" | npx wrangler secret put DATABASE_URL
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}        
 
-      # --- ĐÂY LÀ SỬA LỖI (THÊM command: deploy --no-bundle) ---
       - name: 🚀 Deploy to Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Báo cho Wrangler deploy file đã build, không build lại
-          command: deploy
+          command: >
+            deploy --external @nestjs/websockets 
+                   --external @nestjs/microservices
+                   --external @nestjs/platform-express
